@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Blog</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 15px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"],
+        textarea {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+        button {
+            margin-top: 25px;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+    <script>
+        async function loadBlogDetails() {
+            const params = new URLSearchParams(window.location.search);
+            const blogId = params.get("id");
+
+            if (!blogId || isNaN(blogId)) {
+                alert("Invalid blog ID.");
+                window.location.href = "blogs.html";
+                return;
+            }
+
+            document.getElementById("blogId").value = blogId;
+
+            try {
+                const response = await fetch(`GetBlogByIdServlet?id=${blogId}`);
+                const blog = await response.json();
+
+                if (!blog || !blog.id) {
+                    alert("Blog not found.");
+                    window.location.href = "blogs.html";
+                    return;
+                }
+
+                document.getElementById("name").value = blog.name;
+                document.getElementById("description").value = blog.description;
+                document.getElementById("content").value = blog.content;
+            } catch (err) {
+                alert("Failed to load blog details.");
+                console.error(err);
+            }
+        }
+
+        window.onload = loadBlogDetails;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Update Blog</h2>
+        <form action="UpdateBlogServlet" method="post">
+            <input type="hidden" id="blogId" name="blogId">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" required></textarea>
+
+            <button type="submit">Update Blog</button>
+        </form>
+    </div>
+</body>
+</html>

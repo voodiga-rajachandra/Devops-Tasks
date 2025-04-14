@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .login-container h2 {
+            margin-bottom: 25px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.2s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background-color: #667eea;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #5a67d8;
+        }
+
+        .extra-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .extra-buttons button {
+            flex: 1;
+            margin: 0 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .extra-buttons button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .toggle-switch {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .toggle-switch label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .toggle-switch input {
+            display: none;
+        }
+
+        .slider {
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            position: relative;
+            margin-left: 8px;
+        }
+
+        .slider::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            position: absolute;
+            border-radius: 50%;
+            top: 1px;
+            left: 1px;
+            transition: transform 0.3s;
+        }
+
+        .toggle-switch input:checked + .slider::before {
+            transform: translateX(20px);
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #eee;
+        }
+
+        .dark-mode .login-container {
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .dark-mode input,
+        .dark-mode button {
+            background-color: #2c2c2c;
+            color: white;
+            border: 1px solid #444;
+        }
+
+        .dark-mode input:focus {
+            border-color: #667eea;
+        }
+
+        .dark-mode .extra-buttons button {
+            background-color: #333;
+            color: white;
+        }
+
+        .dark-mode .extra-buttons button:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="toggle-switch">
+            <label>
+                🌞/🌙
+                <input type="checkbox" id="darkModeToggle">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <h2>Login</h2>
+        <form action="LoginServlet" method="post">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="btn-primary">Login</button>
+        </form>
+
+        <div class="extra-buttons">
+            <button onclick="window.location.href='register.html'">Register</button>
+            <button onclick="window.location.href='blogs.html'">Home</button>
+        </div>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        toggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>

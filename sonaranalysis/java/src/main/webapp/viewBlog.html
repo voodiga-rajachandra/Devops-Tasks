@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Blog</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #667eea, #764ba2);
+            color: #333;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        #blog-author {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        #blog-description {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        #blog-content {
+            line-height: 1.6;
+            font-size: 17px;
+        }
+
+        /* Dark Mode */
+        .dark-mode {
+            background-color: #121212;
+            color: #ddd;
+        }
+
+        .dark-mode .container {
+            background-color: #1e1e1e;
+            color: #ddd;
+        }
+
+        .dark-mode #blog-author {
+            color: #aaa;
+        }
+
+        .dark-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+        }
+
+        .dark-toggle input {
+            display: none;
+        }
+
+        .slider {
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border-radius: 50%;
+            top: 1px;
+            left: 1px;
+            transition: transform 0.3s;
+        }
+
+        .dark-toggle input:checked + .slider::before {
+            transform: translateX(20px);
+        }
+
+        .dark-toggle input:checked + .slider {
+            background-color: #667eea;
+        }
+
+        /* Home button */
+        .home-link {
+            position: fixed;
+            top: 15px;
+            left: 20px;
+            font-weight: bold;
+        }
+
+        .home-link a {
+            text-decoration: none;
+            color: #fff;
+            background-color: #667eea;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .home-link a:hover {
+            background-color: #556cd6;
+        }
+    </style>
+
+    <script>
+        async function fetchBlog() {
+            const params = new URLSearchParams(window.location.search);
+            const blogId = params.get("id");
+
+            if (!blogId) {
+                document.getElementById("blog-content").innerHTML = "<p>Invalid blog ID.</p>";
+                return;
+            }
+
+            try {
+                const response = await fetch(`GetBlogByIdServlet?id=${blogId}`);
+                const blog = await response.json();
+
+                if (!blog || !blog.id) {
+                    document.getElementById("blog-content").innerHTML = "<p>Blog not found.</p>";
+                    return;
+                }
+
+                document.getElementById("blog-title").textContent = blog.name;
+                document.getElementById("blog-author").textContent = "By: " + blog.creator;
+                document.getElementById("blog-description").textContent = blog.description;
+                document.getElementById("blog-content").innerHTML = blog.content;
+            } catch (error) {
+                document.getElementById("blog-content").innerHTML = "<p>Error fetching blog.</p>";
+            }
+        }
+
+        function setupDarkMode() {
+            const toggle = document.getElementById("darkModeToggle");
+            toggle.addEventListener("change", () => {
+                document.body.classList.toggle("dark-mode");
+            });
+        }
+
+        window.onload = () => {
+            fetchBlog();
+            setupDarkMode();
+        };
+    </script>
+</head>
+<body>
+    <!-- Home Link -->
+    <div class="home-link">
+        <a href="http://localhost:8080/BlogApp/">🏠 Home</a>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-toggle">
+        <label>
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <!-- Blog Container -->
+    <div class="container">
+        <h2 id="blog-title">Loading...</h2>
+        <p id="blog-author"></p>
+        <p id="blog-description"></p>
+        <div id="blog-content"></div>
+    </div>
+</body>
+</html>
+

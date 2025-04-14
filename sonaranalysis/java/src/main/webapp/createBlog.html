@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #556cd6;
+        }
+
+        /* Dark mode */
+        .dark-mode {
+            background-color: #121212;
+            color: #ddd;
+        }
+
+        .dark-mode .container {
+            background-color: #1e1e1e;
+            color: #ddd;
+        }
+
+        .dark-mode input[type="text"],
+        .dark-mode textarea {
+            background-color: #2c2c2c;
+            color: #eee;
+            border: 1px solid #555;
+        }
+
+        .dark-toggle {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+        }
+
+        .dark-toggle input {
+            display: none;
+        }
+
+        .slider {
+            width: 40px;
+            height: 20px;
+            background-color: #ccc;
+            border-radius: 20px;
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .slider::before {
+            content: "";
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            background-color: white;
+            border-radius: 50%;
+            top: 1px;
+            left: 1px;
+            transition: transform 0.3s;
+        }
+
+        .dark-toggle input:checked + .slider::before {
+            transform: translateX(20px);
+        }
+
+        .dark-toggle input:checked + .slider {
+            background-color: #667eea;
+        }
+    </style>
+    <script>
+        function setupDarkMode() {
+            const toggle = document.getElementById("darkModeToggle");
+            toggle.addEventListener("change", () => {
+                document.body.classList.toggle("dark-mode");
+            });
+        }
+
+        window.onload = setupDarkMode;
+    </script>
+</head>
+<body>
+    <div class="dark-toggle">
+        <label>
+            <input type="checkbox" id="darkModeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="container">
+        <h2>Create a New Blog</h2>
+        <form action="CreateBlogServlet" method="post">
+            <label for="name">Blog Title:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="description">Short Description:</label>
+            <input type="text" id="description" name="description" required>
+
+            <label for="content">Content:</label>
+            <textarea id="content" name="content" rows="8" required></textarea>
+
+            <button type="submit">Create Blog</button>
+        </form>
+    </div>
+</body>
+</html>

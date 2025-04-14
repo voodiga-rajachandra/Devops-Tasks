@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Blogs</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #87ceeb, #add8e6);
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .left-buttons button,
+        .right-buttons button,
+        .btn-group button {
+            padding: 10px 16px;
+            margin: 0 5px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .left-buttons button:hover,
+        .right-buttons button:hover,
+        .btn-group button:hover {
+            background-color: lightgreen;
+        }
+
+        .blog-container {
+            width: 60%;
+            margin: 0 auto;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .blog {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .blog h3 {
+            margin-top: 0;
+        }
+
+        /* Dark mode */
+        body.dark-mode {
+            background: linear-gradient(to right, #1f1f1f, #3a3a3a);
+            color: white;
+        }
+
+        body.dark-mode .blog {
+            background-color: #2b2b2b;
+            color: white;
+        }
+
+        body.dark-mode h2 {
+            color: white;
+        }
+    </style>
+
+    <script>
+        let currentUserId = null;
+
+        async function fetchUser() {
+            const response = await fetch("GetCurrentUserServlet");
+            const user = await response.json();
+
+            if (user && user.id) {
+                currentUserId = parseInt(user.id);
+                document.getElementById("create-blog-btn").style.display = "inline-block";
+                document.getElementById("logout-btn").style.display = "inline-block";
+            } else {
+                document.getElementById("login-btn").style.display = "inline-block";
+            }
+
+            fetchBlogs();
+        }
+
+        async function fetchBlogs() {
+            const response = await fetch("GetBlogsServlet");
+            const blogs = await response.json();
+
+            const blogContainer = document.getElementById("blog-list");
+            blogContainer.innerHTML = "";
+
+            if (blogs.length === 0) {
+                blogContainer.innerHTML = "<p>No blogs available.</p>";
+                return;
+            }
+
+            blogs.forEach(blog => {
+                const blogElement = document.createElement("div");
+                blogElement.classList.add("blog");
+
+                const blogId = parseInt(blog.id);
+                const userId = parseInt(blog.user_id);
+                const creatorName = blog.creator  ;
+
+                blogElement.innerHTML = `
+                    <h3>${blog.name}</h3>
+                    <p><strong>By:</strong> ${creatorName}</p>
+                    <p>${blog.description}</p>
+                    <div class="btn-group">
+                        <button onclick="viewBlog(${blogId})">Read More</button>
+                        ${currentUserId === userId ? `
+                            <button onclick="updateBlog(${blogId})">Update</button>
+                            <button onclick="deleteBlog(${blogId})">Delete</button>
+                        ` : ''}
+                    </div>
+                `;
+
+                blogContainer.appendChild(blogElement);
+            });
+        }
+
+        function viewBlog(id) {
+            window.location.href = `viewBlog.html?id=${id}`;
+        }
+
+        function updateBlog(id) {
+            window.location.href = `updateBlog.html?id=${id}`;
+        }
+
+        async function deleteBlog(id) {
+            if (confirm("Are you sure you want to delete this blog?")) {
+                const response = await fetch("DeleteBlogServlet", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: `blogId=${id}`
+                });
+                const result = await response.text();
+                alert(result);
+                fetchBlogs();
+            }
+        }
+
+        async function logout() {
+            if (!confirm("Are you sure you want to log out?")) return;
+
+            const response = await fetch("LogoutServlet");
+            if (response.ok) {
+                window.location.href = "http://localhost:8080/BlogApp/";
+            } else {
+                alert("Error logging out!");
+            }
+        }
+
+        function goToLogin() {
+            window.location.href = "http://localhost:8080/BlogApp/login.html";
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+            const isDark = document.body.classList.contains("dark-mode");
+            localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+        }
+
+        window.onload = () => {
+            fetchUser();
+            if (localStorage.getItem("darkMode") === "enabled") {
+                document.body.classList.add("dark-mode");
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h2>Blogs</h2>
+        <div class="left-buttons">
+            <button id="create-blog-btn" style="display:none;" onclick="window.location.href='createBlog.html'">Create Blog</button>
+        </div>
+        <div class="right-buttons">
+            <button onclick="toggleDarkMode()">🌙 Dark Mode</button>
+            <button id="logout-btn" style="display:none;" onclick="logout()">Logout</button>
+            <button id="login-btn" style="display:none;" onclick="goToLogin()">Login</button>
+        </div>
+    </div>
+
+    <div id="blog-list" class="blog-container"></div>
+</body>
+</html>

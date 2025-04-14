@@ -1,0 +1,17 @@
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\CreateBlogServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\BlogServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\models\Blog.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\LogoutServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\dao\BlogDAO.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\GetBlogByIdServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\GetBlogsServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\dao\UserDAO.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\com\mycompany\blogapp\JakartaRestConfiguration.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\dao\DatabaseConnection.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\com\mycompany\blogapp\resources\JakartaEE10Resource.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\GetCurrentUserServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\models\User.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\RegisterServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\LoginServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\DeleteBlogServlet.java
+E:\Java_for_class\java_2025\BlogApp\src\main\java\servlets\UpdateBlogServlet.java
